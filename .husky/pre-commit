@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+
+echo "Running pre-commit checks..."
+
+# Step 1: Lint
+echo "--- Linting ---"
+yarn lint || exit 1
+
+# Step 2: Unit tests
+echo "--- Unit Tests ---"
+yarn test || exit 1
+
+# Step 3: E2E tests (Detox)
+# Requires a booted simulator / emulator.
+# Skip with: git commit --no-verify
+echo "--- E2E Tests ---"
+
+# Detox: iOS (requires a booted iOS simulator)
+if xcrun simctl list devices booted 2>/dev/null | grep -q "Booted"; then
+  echo "iOS Simulator detected — running Detox iOS tests..."
+  yarn test:e2e:ios || exit 1
+else
+  echo "No booted iOS Simulator — skipping Detox iOS tests."
+  echo "  Boot with: xcrun simctl boot 'iPhone 16'"
+fi
+
+# Detox: Android (requires a running Android emulator)
+if adb devices 2>/dev/null | grep -q "emulator"; then
+  echo "Android emulator detected — running Detox Android tests..."
+  yarn test:e2e:android || exit 1
+else
+  echo "No Android emulator running — skipping Detox Android tests."
+fi
+
+echo "All pre-commit checks passed!"

@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky"
   },
   "dependencies": {
     "expo": "~52.0.0",
@@ -24,6 +25,7 @@
     "@react-native-async-storage/async-storage": "2.1.0"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
     "@types/react": "~18.3.0",
     "typescript": "~5.3.3",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
